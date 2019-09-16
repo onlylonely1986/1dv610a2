@@ -2,28 +2,29 @@
 
 class DateTimeView {
 
-// Thursday, the 12th of September 2019, The time is 11:51:21
-	public function show() {
+	private $day;
+	private $date;
+	private $monthName;
+	private $year;
+	private $time;
+	private $timeStr = "";
 
+	public function __construct() {
 		date_default_timezone_set("Europe/Stockholm");
-		$day = Date("l");
-		$date = Date("d");
+		$this->day = Date("l");
+		$this->date = Date("dS");
+		$this->monthName = Date("F");
+		$this->year = Date("20y");
+		$this->time = Date("H:i:s");
+	}
 
-		function monthName() {
-			// numeric presentation of month
-			$monthNum = Date("m");
-			// go to string
-			$monthObj = DateTime::createFromFormat('!m', $monthNum);
-			$monthName = $monthObj->format('F');
-			return $monthName;
-		}
-		
-		$year = Date("20y");
-		$time = Date("H:i:s");
-		// obs hardcoded "tember" and "th"
-		$timeString = $day . ", the " . $date . "th of " . monthName() . " " . $year . ", The time is " . $time;
-		
+	public function show() {
+		$this->timeStr = $this->day . ", the " . $this->date . " of " . $this->monthName . " " 
+			. $this->year . ", The time is " . $this->time;
+		return '<p>' . $this->timeStr . '</p>';
+	}
 
-		return '<p>' . $timeString . '</p>';
+	public function toString() {
+		
 	}
 }
