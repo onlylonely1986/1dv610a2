@@ -3,7 +3,7 @@
 namespace Model;
 
 /*
-    User class
+*   User class
 */
 class User {
 
