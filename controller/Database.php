@@ -29,7 +29,6 @@
 
             try {
                 $dbh = new PDO($dsn, $user, $pass);
-                echo 'it works';
             } catch (PDOException $e) {
                 echo 'Connection failed: ' . $e->getMessage();
             }

@@ -23,8 +23,4 @@ class DateTimeView {
 			. $this->year . ", The time is " . $this->time;
 		return '<p>' . $this->timeStr . '</p>';
 	}
-
-	public function toString() {
-		
-	}
 }
