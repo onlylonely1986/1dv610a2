@@ -1,6 +1,7 @@
 <?php
 
 // INCLUDE THE FILES NEEDED...
+require_once('view/RegisterView.php');
 require_once('view/LoginView.php');
 require_once('view/DateTimeView.php');
 require_once('view/LayoutView.php');
@@ -23,12 +24,13 @@ session_start();
 $v = new LoginView();
 $dtv = new DateTimeView();
 $lv = new LayoutView();
+$rv = new RegisterView();
 
 //Create object of the database
 $db = new Database();
 
 if(isset($_SESSION['loggedin'])) {
-  $lv->render(true, $v, $dtv);
+  $lv->render(true, false, $v, $dtv, $rv);
 } else {
-  $lv->render(false, $v, $dtv);
+  $lv->render(false, true, $v, $dtv, $rv);
 }
