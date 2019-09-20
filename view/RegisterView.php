@@ -6,17 +6,17 @@ class RegisterView {
     private static $passwordRepeat = 'RegisterView::PasswordRepeat';
 	private static $messageId = 'RegisterView::Message';
 
-	public function showLink() {
-        if (false) {
+	public function showLink($registerNew) {
+        if ($registerNew) {
             return '
                 <a href="?">Back to login</a>
                 <br/>               
 		    ';
-
         } else {
             return '
                 <a href="?register">Register a new user</a> 
-		    ';
+            ';
+            // echo $_GET['register'];
         }
     }
 
@@ -24,10 +24,14 @@ class RegisterView {
         return '' . self::generateRegisterFormHTML('') . '';
     }
 
-    public function response() {
-    $message = '';
-    $response = $this->generateRegisterFormHTML($message);
-    return $response;
+    public function response($registerNew) {
+        if($registerNew) {
+            $message = '';
+            $response = $this->generateRegisterFormHTML($message);
+            return $response;
+        } else {
+            return;
+        }
     }
     
     /** 

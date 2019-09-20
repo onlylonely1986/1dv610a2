@@ -12,15 +12,6 @@ error_reporting(E_ALL);
 ini_set('display_errors', 'On');
 
 // CREATE OBJECTS OF THE VIEWS
-session_start();
-
-
-// vad är vi i för state
-// har vi någon session
-// är vi inloggade
-// har det skett nån post
-// förändrar det vårt state
-
 $v = new LoginView();
 $dtv = new DateTimeView();
 $lv = new LayoutView();
@@ -29,8 +20,17 @@ $rv = new RegisterView();
 //Create object of the database
 $db = new Database();
 
+// start a new session
+session_start();
+
+$isLoggedIn = false;
+$wantToRegister = false;
+// nån är inloggad finns session
 if(isset($_SESSION['loggedin'])) {
-  $lv->render(true, false, $v, $dtv, $rv);
-} else {
-  $lv->render(false, true, $v, $dtv, $rv);
+    $isLoggedIn = true;
+// nån är inte inloggad vill registrera nya användare
+} else if (isset($_GET['register'])) {
+    $wantToRegister = true;
 }
+
+$lv->render($isLoggedIn, $wantToRegister, $v, $dtv, $rv);

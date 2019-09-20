@@ -24,44 +24,48 @@ class LoginView {
 	 */
 	public function response() {
 		$message = '';
-		
-		// finns det ett post-formulär här?
-        if (isset($_POST[self::$login])) {
-			// är båda rutorna tomma?
-			if (empty($_POST[self::$name]) && empty($_POST[self::$password])) {
-				$message .= 'Username is missing';
-				// är username-rutan tom?
-			} else if (empty($_POST[self::$name])) {
-				$message .= 'Username is missing';
-				// är password-rutan tom?
-            } else if (empty($_POST[self::$password])) {
-				$message .= 'Password is missing';
-				// är lösenordet fel?
-		    } else if($_POST[self::$name] == 'hej123123' && $_POST[self::$password] != 'hej123123') {
-				$message .= 'Wrong name or password';
-				// är användarnamnet fel?
-		    } else if ($_POST[self::$name] != 'hej123123' && $_POST[self::$password] == 'hej123123') {
-			    $message .= 'Wrong name or password';
-			} else if ($_POST[self::$name] == 'hej123123' && $_POST[self::$password] == 'hej123123') {
-				// loggar in
-				$message = 'Welcome';
-				$_SESSION['loggedin'] = 'loggedin';
-				// ska skicka $isLoggedIn = true och rendera en ny h2 Logged in - detta görs i index
-				$response = $this->generateLogoutButtonHTML($message);
-				// loggar inte in...
-		  	} else {
-				// echo 'denna körs nu logoutbutton ska inte komma med';
-				if(isset($_SESSION['loggedin'])) {
-					unset($_SESSION['loggedin']);
-				}
-				$response = $this->generateLoginFormHTML($message);
-		  	}
-
-		   	$this->valueName = $_POST[self::$name];
-		 
+		if(isset($_GET['register'])) {
+			return;
+		} else {
+			// finns det ett post-formulär här?
+			if (isset($_POST[self::$login])) {
+				// är båda rutorna tomma?
+				if (empty($_POST[self::$name]) && empty($_POST[self::$password])) {
+					$message .= 'Username is missing';
+					// är username-rutan tom?
+				} else if (empty($_POST[self::$name])) {
+					$message .= 'Username is missing';
+					// är password-rutan tom?
+				} else if (empty($_POST[self::$password])) {
+					$message .= 'Password is missing';
+					// är lösenordet fel?
+				} else if($_POST[self::$name] == 'hej123123' && $_POST[self::$password] != 'hej123123') {
+					$message .= 'Wrong name or password';
+					// är användarnamnet fel?
+				} else if ($_POST[self::$name] != 'hej123123' && $_POST[self::$password] == 'hej123123') {
+					$message .= 'Wrong name or password';
+				} else if ($_POST[self::$name] == 'hej123123' && $_POST[self::$password] == 'hej123123') {
+					// loggar in
+					$message = 'Welcome';
+					$_SESSION['loggedin'] = 'loggedin';
+					// ska skicka $isLoggedIn = true och rendera en ny h2 Logged in - detta görs i index
+					$response = $this->generateLogoutButtonHTML($message);
+					return $response;
+					// loggar inte in...
+				  } else {
+					// echo 'denna körs nu logoutbutton ska inte komma med';
+					if(isset($_SESSION['loggedin'])) {
+						unset($_SESSION['loggedin']);
+					}
+					$response = $this->generateLoginFormHTML($message);
+				  }
+	
+				   $this->valueName = $_POST[self::$name];
+			 
+			}
+			$response = $this->generateLoginFormHTML($message);
+			return $response;
 		}
-		$response = $this->generateLoginFormHTML($message);
-		return $response;
 	}
 
 	/**

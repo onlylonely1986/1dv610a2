@@ -11,13 +11,13 @@ class LayoutView {
         </head>
         <body>
           <h1>Assignment 2</h1>
-          '  .$rv->showLink() . '
+          '  .$rv->showLink($registerNew) . '
           ' . $this->renderIsLoggedIn($isLoggedIn) . '
           ' . $this->renderRegisterNew($registerNew) . '
           
           <div class="container">
               ' . $v->response() . '
-              ' . $rv->response() . '
+              ' . $rv->response($registerNew) . '
               
               ' . $dtv->show() . '
           </div>
