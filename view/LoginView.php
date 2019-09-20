@@ -30,43 +30,38 @@ class LoginView {
 			// är båda rutorna tomma?
 			if (empty($_POST[self::$name]) && empty($_POST[self::$password])) {
 				$message .= 'Username is missing';
-			// är usernamerutan tom?
+				// är username-rutan tom?
 			} else if (empty($_POST[self::$name])) {
-			   $message .= 'Username is missing';
-			// är passwordrutan tom?
-           } else if (empty($_POST[self::$password])) {
-			   $message .= 'Password is missing';
-		   }
-		   $this->valueName = $_POST[self::$name];
-
-		   // finns det sparade sessionvariabler
-		   if(isset($_SESSION['username']) && isset($_SESSION['password'])) {
-			   // båda rutorna är ifyllda med sparade session-variabler
-			   $this->valueName = $_SESSION['username'];
-			   $this->valuePwd = $_SESSION['password'];
-				// nya inloggningsuppgifter sparas i sessionvariablerna
-				if ($_POST[self::$name] != $_SESSION['username'] && $_POST[self::$password] != $_SESSION['password']) {
-					$_SESSION['username'] = $_POST[self::$name];
-					$_SESSION['password'] = $_POST[self::$password];
+				$message .= 'Username is missing';
+				// är password-rutan tom?
+            } else if (empty($_POST[self::$password])) {
+				$message .= 'Password is missing';
+				// är lösenordet fel?
+		    } else if($_POST[self::$name] == 'hej123123' && $_POST[self::$password] != 'hej123123') {
+				$message .= 'Wrong name or password';
+				// är användarnamnet fel?
+		    } else if ($_POST[self::$name] != 'hej123123' && $_POST[self::$password] == 'hej123123') {
+			    $message .= 'Wrong name or password';
+			} else if ($_POST[self::$name] == 'hej123123' && $_POST[self::$password] == 'hej123123') {
+				// loggar in
+				$message = 'Welcome';
+				$_SESSION['loggedin'] = 'loggedin';
+				// ska skicka $isLoggedIn = true och rendera en ny h2 Logged in - detta görs i index
+				$response = $this->generateLogoutButtonHTML($message);
+				// loggar inte in...
+		  	} else {
+				// echo 'denna körs nu logoutbutton ska inte komma med';
+				if(isset($_SESSION['loggedin'])) {
+					unset($_SESSION['loggedin']);
 				}
-			}	// user rutan är ifylld med sparad session-variabel
-				   // password rutan är ifylld med sparad session-variabel
-			// anv loggar in med rätt anv.namn fel lösenord
-			if($_POST[self::$name] == 'hej123123' && $_POST[self::$password] != 'hej123123') {
-				$message .= 'Wrong username or password';
-			} else if ($_POST[self::$name] != 'hej123123' && $_POST[self::$password] == 'hej123123') {
-				$message .= 'Wrong username or password';
-			}
-			// anv loggar in med fel anv.namn rätt lösenord
-			
-		   
-		   
-		} else {
-			// gör ingenting
+				$response = $this->generateLoginFormHTML($message);
+		  	}
+
+		   	$this->valueName = $_POST[self::$name];
+		 
 		}
-		// var_dump($_SESSION);
-        $response = $this->generateLoginFormHTML($message);
-        return $response;
+		$response = $this->generateLoginFormHTML($message);
+		return $response;
 	}
 
 	/**
@@ -110,13 +105,7 @@ class LoginView {
 	}
 
 	public function login () {
-		if(isset($_POST[self::$login])) {
-			if(isset($_SESSION['username']) || isset($_SESSION['password'])) {
-				echo 'username eller password är inte satt';
-			} else {
-				return "Username is missing";
-			}
-		}
+		
 	}
 	
 	//CREATE GET-FUNCTIONS TO FETCH REQUEST VARIABLES

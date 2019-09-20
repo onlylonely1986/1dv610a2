@@ -13,21 +13,6 @@ ini_set('display_errors', 'On');
 // CREATE OBJECTS OF THE VIEWS
 session_start();
 
-// if(isset($_SESSION)) {
-//   echo 'finns session';
-// }
-
-// $_SESSION['username'] = "hej123123";
-
-if(!isset($_SESSION['username'])) {
-    // echo 'finns inget username';
-} else {
-    // echo "välkommen {$_SESSION['username']}";
-}
-
-// if(!isset($_POST['submit'])) {
-//    echo 'posten funkar ej';
-// }
 
 // vad är vi i för state
 // har vi någon session
@@ -42,5 +27,8 @@ $lv = new LayoutView();
 //Create object of the database
 $db = new Database();
 
-
-$lv->render(false, $v, $dtv);
+if(isset($_SESSION['loggedin'])) {
+  $lv->render(true, $v, $dtv);
+} else {
+  $lv->render(false, $v, $dtv);
+}
