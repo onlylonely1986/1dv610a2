@@ -7,13 +7,25 @@ class LogoutView {
 
 
     public function response() {
+        $message = '';
         if(isset($_SESSION['loggedin'])) {
-            $message = 'Welcome';
-            $_SESSION['loggedin'] = 'true';
-            // ska skicka $isLoggedIn = true och rendera en ny h2 Logged in - detta görs inte i index
-            $response = $this->generateLogoutButtonHTML($message);
-            return $response;
-        }
+                if (isset($_POST[self::$logout])) {
+                    $message = 'Bye, bye!'; // hur ska detta skickas med till vyn nu??
+                    $_SESSION['message'] = 'Bye, bye!';
+                    session_destroy();
+                    header('Location: index.php' );
+                    exit;
+                } else if (isset($_SESSION['message']) == 'loggedin') {
+                    $response = $this->generateLogoutButtonHTML($message);
+                    return $response;
+                } else {
+                    $message = 'Welcome';
+                    $_SESSION['loggedin'] = 'true';
+                    $_SESSION['message'] = 'loggedin';
+                    $response = $this->generateLogoutButtonHTML($message);
+                    return $response;
+                }
+            }      
     }
     
 

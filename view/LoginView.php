@@ -27,7 +27,13 @@ class LoginView {
 
 		if(isset($_GET['register'])) {
 			return;
+		} else if (isset($_SESSION['message'])) { // &&  $_SESSION['message'] == 'Bye, bye!') { // körs ju aldrig!
+			echo ' ja nu är du på väg att logga ut';
+			$message = 'Bye, bye!';
+			$response = $this->generateLoginFormHTML($message);
+			return $response;
 		} else if (isset($_SESSION['loggedin'])) {
+			// echo 'yes nu är du inloggad';
 			return;
 		} else {
 			// finns det ett post-formulär här?
