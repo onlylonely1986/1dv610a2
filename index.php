@@ -3,6 +3,7 @@
 // INCLUDE THE FILES NEEDED...
 require_once('view/RegisterView.php');
 require_once('view/LoginView.php');
+require_once('view/LogoutView.php');
 require_once('view/DateTimeView.php');
 require_once('view/LayoutView.php');
 require_once('controller/Database.php');
@@ -13,6 +14,7 @@ ini_set('display_errors', 'On');
 
 // CREATE OBJECTS OF THE VIEWS
 $v = new LoginView();
+$ov = new LogoutView();
 $dtv = new DateTimeView();
 $lv = new LayoutView();
 $rv = new RegisterView();
@@ -25,6 +27,9 @@ session_start();
 
 $isLoggedIn = false;
 $wantToRegister = false;
+
+// echo 'index körs';
+// var_dump($_SESSION);
 // nån är inloggad finns session
 if(isset($_SESSION['loggedin'])) {
     $isLoggedIn = true;
@@ -33,4 +38,4 @@ if(isset($_SESSION['loggedin'])) {
     $wantToRegister = true;
 }
 
-$lv->render($isLoggedIn, $wantToRegister, $v, $dtv, $rv);
+$lv->render($isLoggedIn, $wantToRegister, $v, $ov, $dtv, $rv);
