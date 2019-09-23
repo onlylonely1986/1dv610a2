@@ -8,29 +8,37 @@ class LogoutView {
 
     public function response() {
         $message = '';
-        if(isset($_SESSION['loggedin']) == 'true') {
-            // nån trycker på logout
+        if(isset($_SESSION['loggedin'])) {
+            var_dump($_SESSION);
+            // utloggning
             if (isset($_POST[self::$logout])) {
-                $_SESSION['message'] = 'Bye, bye!';
-                // $_SESSION['loggedin'] = 'Logging out';
-                unset($_SESSION['loggedin']); // $_SESSION['loggedin'] = 'false';
-                // session_destroy(); ej rekommenderat att använda utan kör unset($_SESSION[])
+                $_SESSION['message'] = 'Bye bye!';
+                unset($_SESSION['loggedin']);
                 // in public server use: header('Location: /index.php' );
                 header('Location: index.php' );
                 exit;
             // fortfarande inloggad reloadar sidan
-            } else if (isset($_SESSION['message']) == 'loggedin') {
+            } else if (isset($_SESSION['message']) == 'Welcome back with cookie') {
+                // echo 'inlogg med cookies';
+                $message = $_SESSION['message'];
+                unset($_SESSION['message']);
+            } else if (isset($_SESSION['loginReload']) == 'yes') {
+
+                $message = '';
+                unset($_SESSION['firstLogin']);
+        
+            // nån loggar in första gången och välkommen visas
+            } else if (isset($_SESSION['message']) == 'Welcome') {
+                // echo 'welcome ska visas';
                 $_SESSION['loggedin'] = 'true';
-                $response = $this->generateLogoutButtonHTML($message);
-                return $response;
-            // nån loggar in och välkommen visas
-            } else {
-                $message = 'Welcome';
-                $_SESSION['loggedin'] = 'true';
-                $_SESSION['message'] = 'loggedin';
-                $response = $this->generateLogoutButtonHTML($message);
-                return $response;
-            }
+                $_SESSION['message'] = 'Welcome';
+                $_SESSION['loginReload'] = 'yes';
+                $message = $_SESSION['message'];
+                unset($_SESSION['message']);
+            // inlogg med cookie
+            } 
+            $response = $this->generateLogoutButtonHTML($message);
+            return $response;
         }
     }
     

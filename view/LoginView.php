@@ -24,41 +24,56 @@ class LoginView {
 	 */
 	public function response() {
 		$message = '';
-
-		if(isset($_GET['register'])) {
+		
+		//else if (isset($_SESSION['message']) && $_SESSION['message'] = 'Welcome back with cookie') {
+			// echo 'cookie finns';
+		//	return;
+		// } 
+		
+	    if (isset($_GET['register'])) {
 			return;
 		} else if (isset($_SESSION['loggedin'])) {
-			// echo 'nån är inloggad ja';
+			// echo 'nån är inloggad ja'; // ja alltid vid inloggad
 			return;
 			// finns det ett post-formulär här?
-		} else if(isset($_SESSION['message']) && $_SESSION['message'] = 'Bye, bye!') {
-			$message = 'Bye, bye!';
+		} else if(isset($_SESSION['message']) && $_SESSION['message'] = 'Bye bye!') {
+			$message = $_SESSION['message'];
 			unset($_SESSION['message']);
-		} else {
+		} else if (isset($_POST[self::$login])) {
+			$this->valueName = $_POST[self::$name];
+			if (isset($_COOKIE['username']) && isset($_COOKIE['username'])) {
+				// echo 'finns kaka';
+				$this->valueName = $_COOKIE['username'];
+				$this->valuePwd = $_COOKIE['password'];
+				$_SESSION['loggedin'] = 'true';
+				$_SESSION['message'] = 'Welcome back with cookie';
 			
-			if (isset($_POST[self::$login])) {
-				$this->valueName = $_POST[self::$name];	
-				// är båda rutorna tomma?
-				if (empty($_POST[self::$name]) && empty($_POST[self::$password])) {
-					$message .= 'Username is missing';
-					// är username-rutan tom?
-				} else if (empty($_POST[self::$name])) {
-					$message .= 'Username is missing';
-					// är password-rutan tom?
-				} else if (empty($_POST[self::$password])) {
-					$message .= 'Password is missing';
-					// är lösenordet fel?
-				} else if($_POST[self::$name] == 'hej123123' && $_POST[self::$password] != 'hej123123') {
-					$message .= 'Wrong name or password';
-					// är användarnamnet fel?
-				} else if ($_POST[self::$name] != 'hej123123' && $_POST[self::$password] == 'hej123123') {
-					$message .= 'Wrong name or password';
-				} else if ($_POST[self::$name] == 'hej123123' && $_POST[self::$password] == 'hej123123') {
-					$_SESSION['loggedin'] = 'true';
-					// in public server use: header('Location: /index.php' );
-					header('Location: index.php');
-					exit;
+			// är båda rutorna tomma?
+			} else if (empty($_POST[self::$name]) && empty($_POST[self::$password])) {
+				$message .= 'Username is missing';
+				// är username-rutan tom?
+			} else if (empty($_POST[self::$name])) {
+				$message .= 'Username is missing';
+				// är password-rutan tom?
+			} else if (empty($_POST[self::$password])) {
+				$message .= 'Password is missing';
+				// är lösenordet fel?
+			} else if($_POST[self::$name] == 'hej123123' && $_POST[self::$password] != 'hej123123') {
+				$message .= 'Wrong name or password';
+				// är användarnamnet fel?
+			} else if ($_POST[self::$name] != 'hej123123' && $_POST[self::$password] == 'hej123123') {
+				$message .= 'Wrong name or password';
+			} else if ($_POST[self::$name] == 'hej123123' && $_POST[self::$password] == 'hej123123') {
+				$_SESSION['loggedin'] = 'true';
+				$_SESSION['message'] = 'Welcome';
+				if($_POST[self::$keep]) {
+					setcookie("username", $_POST[self::$name], time()+3600);
+					setcookie("password", $_POST[self::$password], time()+3600);
 				}
+
+				// in public server use: header('Location: /index.php' );
+				header('Location: index.php');
+				exit;
 			}
 		} 
 		$response = $this->generateLoginFormHTML($message);
