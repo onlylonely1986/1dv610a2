@@ -11,8 +11,8 @@ class LayoutView {
         </head>
         <body>
           <h1>Assignment 2</h1>
-            ' . $this->renderIsLoggedIn($isLoggedIn) . '
             '  .$rv->showLink($registerNew) . '
+            ' . $this->renderIsLoggedIn($isLoggedIn) . '
             ' . $this->renderRegisterNew($registerNew) . '
           
           <div class="container">

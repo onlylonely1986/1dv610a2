@@ -27,17 +27,17 @@ class LoginView {
 
 		if(isset($_GET['register'])) {
 			return;
-		} else if (isset($_SESSION['message'])) { // &&  $_SESSION['message'] == 'Bye, bye!') { // körs ju aldrig!
-			echo ' ja nu är du på väg att logga ut';
-			$message = 'Bye, bye!';
-			$response = $this->generateLoginFormHTML($message);
-			return $response;
 		} else if (isset($_SESSION['loggedin'])) {
-			// echo 'yes nu är du inloggad';
+			// echo 'nån är inloggad ja';
 			return;
-		} else {
 			// finns det ett post-formulär här?
+		} else if(isset($_SESSION['message']) && $_SESSION['message'] = 'Bye, bye!') {
+			$message = 'Bye, bye!';
+			unset($_SESSION['message']);
+		} else {
+			
 			if (isset($_POST[self::$login])) {
+				$this->valueName = $_POST[self::$name];	
 				// är båda rutorna tomma?
 				if (empty($_POST[self::$name]) && empty($_POST[self::$password])) {
 					$message .= 'Username is missing';
@@ -54,26 +54,15 @@ class LoginView {
 				} else if ($_POST[self::$name] != 'hej123123' && $_POST[self::$password] == 'hej123123') {
 					$message .= 'Wrong name or password';
 				} else if ($_POST[self::$name] == 'hej123123' && $_POST[self::$password] == 'hej123123') {
-					// loggar in
-					// $message = 'Welcome';
 					$_SESSION['loggedin'] = 'true';
+					// in public server use: header('Location: /index.php' );
 					header('Location: index.php');
 					exit;
-					// return self::login();
-				} else {
-					// echo 'denna körs nu logoutbutton ska inte komma med';
-					if(isset($_SESSION['loggedin'])) {
-						unset($_SESSION['loggedin']);
-					}
-					$response = $this->generateLoginFormHTML($message);
 				}
-	
-				$this->valueName = $_POST[self::$name];
-			 
 			}
-			$response = $this->generateLoginFormHTML($message);
-			return $response;
-		}
+		} 
+		$response = $this->generateLoginFormHTML($message);
+		return $response;
 	}
 	
 	/** 

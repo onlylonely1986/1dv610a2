@@ -28,17 +28,22 @@ session_start();
 $isLoggedIn = false;
 $wantToRegister = false;
 
-if(isset($_SESSION['message'])) {
-    $message = $_SESSION['message'];
-    // echo $message;
-}
+// if (isset($_SESSION['message']) == 'Bye, bye!') {
+//     echo 'ja nuuuu';
+//     $message = 'Bye, bye!';
+//     session_destroy();
+//     $response = $this->generateLogoutButtonHTML($message);
+//     return $response;
+// } 
+
 // nån är inloggad finns session
 if(isset($_SESSION['loggedin'])) {
     $isLoggedIn = true;
-    // inloggad på sidan och kör en reload
+    // inloggad på sidan och loggar ut
     // nån är inte inloggad vill registrera nya användare
 } else if (isset($_GET['register'])) {
     $wantToRegister = true;
+    // detta händer aldrig eftersom index inte laddas om när man kommer till den metoden...
 }
 
 $lv->render($isLoggedIn, $wantToRegister, $v, $ov, $dtv, $rv);

@@ -7,16 +7,20 @@ class RegisterView {
 	private static $messageId = 'RegisterView::Message';
 
 	public function showLink($registerNew) {
-        if ($registerNew) {
-            return '
-                <a href="?">Back to login</a>
-                <br/>               
-		    ';
+        if(isset($_SESSION['loggedin'])) {
+            return;
         } else {
-            return '
-                <a href="?register">Register a new user</a> 
-            ';
-            // echo $_GET['register'];
+            if ($registerNew) {
+                return '
+                    <a href="?">Back to login</a>
+                    <br/>               
+                ';
+            } else {
+                return '
+                    <a href="?register">Register a new user</a> 
+                ';
+                // echo $_GET['register'];
+            }
         }
     }
 
