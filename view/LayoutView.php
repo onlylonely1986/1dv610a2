@@ -11,13 +11,12 @@ class LayoutView {
         </head>
         <body>
           <h1>Assignment 2</h1>
-            '  .$rv->showLink($registerNew) . '
             ' . $this->renderIsLoggedIn($isLoggedIn) . '
+            '  .$rv->showLink($registerNew) . '
             ' . $this->renderRegisterNew($registerNew) . '
           
           <div class="container">
               ' . $lv->response() . '
-              ' . $ov->response() . '
               ' . $rv->response($registerNew) . '
               
               ' . $dtv->show() . '
@@ -26,7 +25,7 @@ class LayoutView {
       </html>
     ';
   }
-  
+  // ' . $ov->response() . '
   private function renderIsLoggedIn($isLoggedIn) {
     if(isset($_SESSION['loggedin'])) {
       return '<h2>Logged in</h2>';

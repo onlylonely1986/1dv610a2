@@ -9,7 +9,7 @@ class LoginView {
 	private static $cookiePassword = 'LoginView::CookiePassword';
 	private static $keep = 'LoginView::KeepMeLoggedIn';
 	private static $messageId = 'LoginView::Message';
-	// private $message = 'LoginView::Message';
+	private static $message = '';
 	public $valueName = '';
 	public $valuePwd = '';
 
@@ -23,60 +23,15 @@ class LoginView {
 	 * @return  void BUT writes to standard output and cookies!
 	 */
 	public function response() {
-		$message = '';
+		// self::$message = '';	
 		
-		//else if (isset($_SESSION['message']) && $_SESSION['message'] = 'Welcome back with cookie') {
-			// echo 'cookie finns';
-		//	return;
-		// } 
-		
-	    if (isset($_GET['register'])) {
+		if (isset($_GET['register'])) {
 			return;
 		} else if (isset($_SESSION['loggedin'])) {
-			// echo 'nån är inloggad ja'; // ja alltid vid inloggad
-			return;
-			// finns det ett post-formulär här?
-		} else if(isset($_SESSION['message']) && $_SESSION['message'] = 'Bye bye!') {
-			$message = $_SESSION['message'];
-			unset($_SESSION['message']);
-		} else if (isset($_POST[self::$login])) {
-			$this->valueName = $_POST[self::$name];
-			if (isset($_COOKIE['username']) && isset($_COOKIE['username'])) {
-				// echo 'finns kaka';
-				$this->valueName = $_COOKIE['username'];
-				$this->valuePwd = $_COOKIE['password'];
-				$_SESSION['loggedin'] = 'true';
-				$_SESSION['message'] = 'Welcome back with cookie';
-			
-			// är båda rutorna tomma?
-			} else if (empty($_POST[self::$name]) && empty($_POST[self::$password])) {
-				$message .= 'Username is missing';
-				// är username-rutan tom?
-			} else if (empty($_POST[self::$name])) {
-				$message .= 'Username is missing';
-				// är password-rutan tom?
-			} else if (empty($_POST[self::$password])) {
-				$message .= 'Password is missing';
-				// är lösenordet fel?
-			} else if($_POST[self::$name] == 'hej123123' && $_POST[self::$password] != 'hej123123') {
-				$message .= 'Wrong name or password';
-				// är användarnamnet fel?
-			} else if ($_POST[self::$name] != 'hej123123' && $_POST[self::$password] == 'hej123123') {
-				$message .= 'Wrong name or password';
-			} else if ($_POST[self::$name] == 'hej123123' && $_POST[self::$password] == 'hej123123') {
-				$_SESSION['loggedin'] = 'true';
-				$_SESSION['message'] = 'Welcome';
-				if($_POST[self::$keep]) {
-					setcookie("username", $_POST[self::$name], time()+3600);
-					setcookie("password", $_POST[self::$password], time()+3600);
-				}
-
-				// in public server use: header('Location: /index.php' );
-				header('Location: index.php');
-				exit;
-			}
-		} 
-		$response = $this->generateLoginFormHTML($message);
+			$response = $this->generateLogoutButtonHTML(self::$message);
+			return $response;
+		}
+		$response = $this->generateLoginFormHTML(self::$message);
 		return $response;
 	}
 	
@@ -106,8 +61,75 @@ class LoginView {
 		';
 	}
 
-	private function login () {
+	    /**
+	* Generate HTML code on the output buffer for the logout button
+	* @param $message, String output message
+	* @return  void, BUT writes to standard output!
+	*/
+	private function generateLogoutButtonHTML($message) {
+		return '
+			<form  method="post" >
+				<p id="' . self::$messageId . '">' . $message .'</p>
+				<input type="submit" name="' . self::$logout . '" value="logout"/>
+			</form>
+		';
+	}
 
+	public function ifLoggedIn () {
+		$logged = false;
+		// return $loggedIn;
+		// $response = $this->generateLogoutButtonHTML(self::$message);
+		if (isset($_SESSION['loginReload']) == 'yes') {
+			if(isset($_COOKIE['username'])) {
+				self::$message = 'Welcome back with cookie';
+			} else {
+				self::$message = '';
+			}
+			unset($_SESSION['loginReload']);
+			unset($_SESSION['message']);
+			$logged = true;
+			return $logged;
+
+		} else if (isset($_POST[self::$login])) {
+			$this->valueName = $_POST[self::$name];
+			
+			// är båda rutorna tomma?
+			if (empty($_POST[self::$name]) && empty($_POST[self::$password])) {
+				self::$message .= 'Username is missing';
+				// är username-rutan tom?
+			} else if (empty($_POST[self::$name])) {
+				self::$message .= 'Username is missing';
+				// är password-rutan tom?
+			} else if (empty($_POST[self::$password])) {
+				self::$message .= 'Password is missing';
+				// är lösenordet fel?
+			} else if($_POST[self::$name] == 'hej123123' && $_POST[self::$password] != 'hej123123') {
+				self::$message .= 'Wrong name or password';
+				// är användarnamnet fel?
+			} else if ($_POST[self::$name] != 'hej123123' && $_POST[self::$password] == 'hej123123') {
+				self::$message .= 'Wrong name or password';
+			} else if ($_POST[self::$name] == 'hej123123' && $_POST[self::$password] == 'hej123123') {
+				$_SESSION['loggedin'] = 'true';
+				$_SESSION['message'] = 'Welcome';
+				$_SESSION['loginReload'] = 'yes';
+				self::$message = $_SESSION['message'];
+
+				if(isset($_POST[self::$keep])) {
+					setcookie("username", $_POST[self::$name], time()+3600);
+					setcookie("password", $_POST[self::$password], time()+3600);
+					$_SESSION['rememberMe'] = 'yes';
+				}
+				$logged = true;
+				return $logged;
+			} 
+		} else if (isset($_POST[self::$logout])) {
+			$_SESSION['message'] = 'Bye bye!';
+			self::$message = $_SESSION['message'];
+			unset($_SESSION['loggedin']);
+			$response = $this->generateLogoutButtonHTML(self::$message);
+			$logged = false;
+			return $logged;
+		} 
 	}
 
 	public function logout () {

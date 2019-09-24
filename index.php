@@ -28,14 +28,15 @@ session_start();
 $isLoggedIn = false;
 $wantToRegister = false;
 
-// nån är inloggad finns session
-if (isset($_COOKIE['username'])) {
-    $isLoggedIn = true;
-    $_SESSION['message'] = 'Welcome back with cookie';
-} else if(isset($_SESSION['loggedin'])) {
-    $isLoggedIn = true;
-    // nån är inte inloggad vill registrera nya användare
-} else if (isset($_GET['register'])) {
+// 1. kolla state
+// 2. rendera sida
+// 3. 
+$isLoggedIn = $v->ifLoggedIn();
+// echo $isLoggedIn;
+// $isLoggedIn = $v->controllLoggedIn();
+// $lv->render($isLoggedIn, $v, $dtv, $regV, $newUserRegister);
+
+if (isset($_GET['register'])) {
     $wantToRegister = true;
 } 
 
