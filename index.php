@@ -27,14 +27,13 @@ session_start();
 
 $isLoggedIn = false;
 $wantToRegister = false;
+$showRegView = false;
 
-// 1. kolla state
-// 2. rendera sida
-// 3. 
 $isLoggedIn = $v->ifLoggedIn();
+$wantToRegister = $rv->doRegistration();
 
 if (isset($_GET['register'])) {
-    $wantToRegister = true;
+    $showRegView = true;
 }
 
-$lv->render($isLoggedIn, $wantToRegister, $v, $ov, $dtv, $rv);
+$lv->render($isLoggedIn, $showRegView, $v, $ov, $dtv, $rv);

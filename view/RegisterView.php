@@ -4,7 +4,9 @@ class RegisterView {
 	private static $name = 'RegisterView::UserName';
     private static $password = 'RegisterView::Password';
     private static $passwordRepeat = 'RegisterView::PasswordRepeat';
-	private static $messageId = 'RegisterView::Message';
+    private static $messageId = 'RegisterView::Message';
+    private static $message = '';
+    private static $register = 'RegisterView::Register';
 
 	public function showLink($registerNew) {
         if(isset($_SESSION['loggedin'])) {
@@ -19,19 +21,18 @@ class RegisterView {
                 return '
                     <a href="?register">Register a new user</a> 
                 ';
-                // echo $_GET['register'];
             }
         }
     }
 
-    public function showForm() {
-        return '' . self::generateRegisterFormHTML('') . '';
-    }
+    // public function showForm() {
+    //    return '' . self::generateRegisterFormHTML('') . '';
+    // }
 
     public function response($registerNew) {
         if($registerNew) {
-            $message = '';
-            $response = $this->generateRegisterFormHTML($message);
+            // self::$messageId = '';
+            $response = $this->generateRegisterFormHTML(self::$message);
             return $response;
         } else {
             return;
@@ -62,13 +63,28 @@ class RegisterView {
 					<input type="password" id="' . self::$passwordRepeat . '" name="' . self::$passwordRepeat . '" size="20" value="" />
                     <br/>
 
-					<input type="submit" name="" value="Register" />
+					<input type="submit" name="' . self::$register . '" value="Register" />
 				</fieldset>
 			</form>
 		';
     }
     
-    private function  doRegistration() {
-        echo 'new registration';
+    public function  doRegistration() {
+        $registration = false;
+        if (isset($_POST[self::$register])) {
+            if (empty($_POST[self::$name]) && empty($_POST[self::$password])) {
+                self::$message .= 'Username has too few characters, at least 3 characters.';
+                    // Password has too few characters, at least 6 characters.</br>    
+            }
+            if (empty($_POST[self::$password]) && empty($_POST[self::$passwordRepeat])) {
+                self::$message .= 'Password has too few characters, at least 6 characters.';
+            }
+            if ($_POST[self::$name] == 'Admin') {
+                self::$message .= 'User exists, pick another username.';
+            }
+        } else {
+            self::$message = '';
+        }
+        return $registration;
     }
 }

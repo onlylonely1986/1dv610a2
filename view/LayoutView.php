@@ -2,7 +2,7 @@
 
 class LayoutView {
   
-  public function render($isLoggedIn, $registerNew, LoginView $lv, LogoutView $ov, DateTimeView $dtv, RegisterView $rv) {
+  public function render($isLoggedIn, $showRegView, LoginView $lv, LogoutView $ov, DateTimeView $dtv, RegisterView $rv) {
     echo '<!DOCTYPE html>
       <html>
         <head>
@@ -12,12 +12,12 @@ class LayoutView {
         <body>
           <h1>Assignment 2</h1>
             ' . $this->renderIsLoggedIn($isLoggedIn) . '
-            '  .$rv->showLink($registerNew) . '
-            ' . $this->renderRegisterNew($registerNew) . '
+            '  .$rv->showLink($showRegView) . '
+            ' . $this->renderRegisterNew($showRegView) . '
           
           <div class="container">
               ' . $lv->response() . '
-              ' . $rv->response($registerNew) . '
+              ' . $rv->response($showRegView) . '
               
               ' . $dtv->show() . '
           </div>
