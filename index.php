@@ -32,12 +32,9 @@ $wantToRegister = false;
 // 2. rendera sida
 // 3. 
 $isLoggedIn = $v->ifLoggedIn();
-// echo $isLoggedIn;
-// $isLoggedIn = $v->controllLoggedIn();
-// $lv->render($isLoggedIn, $v, $dtv, $regV, $newUserRegister);
 
 if (isset($_GET['register'])) {
     $wantToRegister = true;
-} 
+}
 
 $lv->render($isLoggedIn, $wantToRegister, $v, $ov, $dtv, $rv);

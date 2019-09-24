@@ -23,16 +23,22 @@ class LoginView {
 	 * @return  void BUT writes to standard output and cookies!
 	 */
 	public function response() {
-		// self::$message = '';	
-		
+		$response;
+		if(isset($_SESSION['message'])) {
+			unset($_SESSION['message']);
+		}
 		if (isset($_GET['register'])) {
 			return;
+		} else if (isset($_POST[self::$logout]) && isset($_SESSION['loggedin'])) {
+			$response = $this->generateLoginFormHTML(self::$message);
+			return $response;
 		} else if (isset($_SESSION['loggedin'])) {
 			$response = $this->generateLogoutButtonHTML(self::$message);
 			return $response;
+		} else {
+			$response = $this->generateLoginFormHTML(self::$message);
+			return $response;
 		}
-		$response = $this->generateLoginFormHTML(self::$message);
-		return $response;
 	}
 	
 	/** 
@@ -77,19 +83,27 @@ class LoginView {
 
 	public function ifLoggedIn () {
 		$logged = false;
-		// return $loggedIn;
-		// $response = $this->generateLogoutButtonHTML(self::$message);
-		if (isset($_SESSION['loginReload']) == 'yes') {
-			if(isset($_COOKIE['username'])) {
-				self::$message = 'Welcome back with cookie';
-			} else {
-				self::$message = '';
+
+		if (isset($_POST[self::$logout]) && isset($_SESSION['loggedin'])) {
+			$_SESSION['message'] = 'Bye bye!';
+			self::$message = $_SESSION['message'];
+			unset($_SESSION['loggedin']);
+			unset($_SESSION['message']);
+			return $logged;
+		} else if(isset($_COOKIE['Admin']) && !isset($_SESSION['welcome'])) {
+			if($_COOKIE['Admin'] == 'Password') {
+				$_SESSION['loggedin'] = 'true';
+				$_SESSION['welcome'] = 'true';
+				$logged = true;
+				self::$message = "Welcome back with cookie";
+				return $logged;
 			}
-			unset($_SESSION['loginReload']);
+		} else if (isset($_SESSION['loggedin']) && isset($_SESSION['welcome'])) {
+			self::$message = '';
+			unset($_SESSION['welcome']);
 			unset($_SESSION['message']);
 			$logged = true;
 			return $logged;
-
 		} else if (isset($_POST[self::$login])) {
 			$this->valueName = $_POST[self::$name];
 			
@@ -103,33 +117,35 @@ class LoginView {
 			} else if (empty($_POST[self::$password])) {
 				self::$message .= 'Password is missing';
 				// är lösenordet fel?
-			} else if($_POST[self::$name] == 'hej123123' && $_POST[self::$password] != 'hej123123') {
+			} else if($_POST[self::$name] == 'Admin' && $_POST[self::$password] != 'Password') {
 				self::$message .= 'Wrong name or password';
 				// är användarnamnet fel?
-			} else if ($_POST[self::$name] != 'hej123123' && $_POST[self::$password] == 'hej123123') {
+			} else if ($_POST[self::$name] != 'Admin' && $_POST[self::$password] == 'Password') {
 				self::$message .= 'Wrong name or password';
-			} else if ($_POST[self::$name] == 'hej123123' && $_POST[self::$password] == 'hej123123') {
+			} else if ($_POST[self::$name] == 'Admin' && $_POST[self::$password] == 'Password') {
 				$_SESSION['loggedin'] = 'true';
+				$_SESSION['username'] = $_POST[self::$name];
 				$_SESSION['message'] = 'Welcome';
-				$_SESSION['loginReload'] = 'yes';
+				$_SESSION['welcome'] = 'true';
 				self::$message = $_SESSION['message'];
 
 				if(isset($_POST[self::$keep])) {
-					setcookie("username", $_POST[self::$name], time()+3600);
-					setcookie("password", $_POST[self::$password], time()+3600);
+					$cookieName = $_POST[self::$name];
+					$cookiePassword = $_POST[self::$password];
+					$logged = true;
+					setcookie($cookieName, $cookiePassword, time()+3600);
+					// setcookie("username", $_POST[self::$name], time()+3600);
+					// setcookie("password", $_POST[self::$password], time()+3600);
 					$_SESSION['rememberMe'] = 'yes';
 				}
 				$logged = true;
 				return $logged;
-			} 
-		} else if (isset($_POST[self::$logout])) {
-			$_SESSION['message'] = 'Bye bye!';
-			self::$message = $_SESSION['message'];
-			unset($_SESSION['loggedin']);
-			$response = $this->generateLogoutButtonHTML(self::$message);
-			$logged = false;
-			return $logged;
-		} 
+			} else if ((isset($_SESSION['loggedin'])) && (isset($_SESSION['message']))) {
+				$logged = true;
+				echo 'när gäller detta fall??';
+				return $logged;
+			}
+		}
 	}
 
 	public function logout () {

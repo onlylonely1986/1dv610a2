@@ -25,7 +25,7 @@ class LayoutView {
       </html>
     ';
   }
-  // ' . $ov->response() . '
+
   private function renderIsLoggedIn($isLoggedIn) {
     if(isset($_SESSION['loggedin'])) {
       return '<h2>Logged in</h2>';
