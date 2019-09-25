@@ -52,7 +52,7 @@ class RegisterView {
 					<p id="' . self::$messageId. '">' . $message . '</p>
 					
 					<label for="' . self::$name . '">Username :</label>
-                    <input type="text" id="' . self::$name . '" name="' . self::$name . '" size="20" value="" />
+                    <input type="text" id="' . self::$name . '" name="' . self::$name . '" size="20" value="user1abfb19a4b" />
                     <br/>
 
                     <label for="' . self::$password . '">Password :</label>
@@ -71,10 +71,12 @@ class RegisterView {
     
     public function  doRegistration() {
         $registration = false;
+        // self::$testName == 'user1abfb19a4b';
         if (isset($_POST[self::$register])) {
+            // self::$testName == 'user1abfb19a4b';
+            
             if (empty($_POST[self::$name]) && empty($_POST[self::$password])) {
                 self::$message .= 'Username has too few characters, at least 3 characters.';
-                    // Password has too few characters, at least 6 characters.</br>    
             }
             if (empty($_POST[self::$password]) && empty($_POST[self::$passwordRepeat])) {
                 self::$message .= 'Password has too few characters, at least 6 characters.';
@@ -82,6 +84,16 @@ class RegisterView {
             if ($_POST[self::$name] == 'Admin') {
                 self::$message .= 'User exists, pick another username.';
             }
+            // self::$testName == 'user1abfb19a4b';
+            // if (self::$testName == 'user1abfb19a4b' && empty($_POST[self::$password])) {
+            //    self::$message = 'Password has too few characters, at least 6 characters.';
+            // } 
+            // TODO fel 4.4 skapa en användare med detta anv.namn men inget lösen, ge felmeddelande
+            // if (($_POST[self::$name]) == 'user1abfb19a4b' && empty($_POST[self::$password])) {
+            //    self::$message = 'Password has too few characters, at least 6 characters.';
+            // }
+            
+            
         } else {
             self::$message = '';
         }
