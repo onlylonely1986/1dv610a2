@@ -134,15 +134,12 @@ class LoginView {
 					$cookiePassword = $_POST[self::$password];
 					$logged = true;
 					setcookie($cookieName, $cookiePassword, time()+3600);
-					// setcookie("username", $_POST[self::$name], time()+3600);
-					// setcookie("password", $_POST[self::$password], time()+3600);
 					$_SESSION['rememberMe'] = 'yes';
 				}
 				$logged = true;
 				return $logged;
 			} else if ((isset($_SESSION['loggedin'])) && (isset($_SESSION['message']))) {
 				$logged = true;
-				echo 'när gäller detta fall??';
 				return $logged;
 			}
 		}

@@ -11,11 +11,6 @@
 
         public function __construct() {
             /* Connect to a MySQL database using driver invocation */
-            // $dsn = 'mysql:dbname=wordpress2019;host=localhost';
-            // $user = 'root';
-            // $password = 'gulavillan91';
-            // $dbSettings = new DataBaseSettings;
-            // $dbSettings.getSettings();
 
             // Load settings from parent class
             $settings = DatabaseSettings::getSettings();
