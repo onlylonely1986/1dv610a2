@@ -71,11 +71,13 @@ class RegisterView {
     
     public function  doRegistration() {
         $registration = false;
-        // self::$testName == 'user1abfb19a4b';
+        
         if (isset($_POST[self::$register])) {
-            // self::$testName == 'user1abfb19a4b';
-            
-            if (empty($_POST[self::$name]) && empty($_POST[self::$password])) {
+            self::$testName == $_POST[self::$name];
+            if (empty($_POST[self::$passwordRepeat])) {
+                self::$message .= 'Password has too few characters, at least 6 characters.';
+            }
+            if (empty($_POST[self::$name]) || empty($_POST[self::$password])) {
                 self::$message .= 'Username has too few characters, at least 3 characters.';
             }
             if (empty($_POST[self::$password]) && empty($_POST[self::$passwordRepeat])) {
@@ -84,16 +86,6 @@ class RegisterView {
             if ($_POST[self::$name] == 'Admin') {
                 self::$message .= 'User exists, pick another username.';
             }
-            // self::$testName == 'user1abfb19a4b';
-            // if (self::$testName == 'user1abfb19a4b' && empty($_POST[self::$password])) {
-            //    self::$message = 'Password has too few characters, at least 6 characters.';
-            // } 
-            // TODO fel 4.4 skapa en användare med detta anv.namn men inget lösen, ge felmeddelande
-            // if (($_POST[self::$name]) == 'user1abfb19a4b' && empty($_POST[self::$password])) {
-            //    self::$message = 'Password has too few characters, at least 6 characters.';
-            // }
-            
-            
         } else {
             self::$message = '';
         }
